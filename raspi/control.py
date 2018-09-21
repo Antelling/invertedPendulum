@@ -8,6 +8,7 @@ import RPi.GPIO as GPIO
 import pigpio
 pi = pigpio.pi()
 zeropoint = 1522
+current_speed = zeropoint
 
 # endregion
 
@@ -56,8 +57,8 @@ class PIDController(object):
 
         return x_p_adjustment + x_i_adjustment + x_d_adjustment
 
-s = .01
-p = 600
+s = 10
+p = 5
 d = 0
 m = True
 controller = PIDController(p, 0, d)
@@ -94,9 +95,13 @@ try:
         adjust = controller.step(prev_pos, radians)
         print("controller response is: " + str(adjust))
 
+        #we use this response as acceleration
+        current_speed += adjust
+        current_speed = median([1420, current_speed, 1630])
+
         prev_pos = radians
 
-        pi.set_servo_pulsewidth(18, zeropoint + adjust)
+        pi.set_servo_pulsewidth(18, current_speed)
 
 except KeyboardInterrupt:
     pi.set_servo_pulsewidth(18, zeropoint)
