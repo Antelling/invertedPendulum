@@ -1,0 +1,4 @@
+.idea
+*.pyc
+raspi/.*
+raspi/pigpiod
