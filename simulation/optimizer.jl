@@ -1,16 +1,16 @@
 include("integrator.jl") #I
 include("controller.jl") #C
-include("structs.jl") #S
+include("structs.jl")
 
 using Distributions: Normal, Uniform
 
 
 #we need a heuristic and an optimizer
-orig_system = S.System([50.0, 20.0], [50.0, 40.0], 0.0, 0.0, .000001, 50000)
-orig_system = S.System([50.0, 40.0], [60.0, 10.0], 0.0, 0.0, .001, 50)
+orig_system = System([50.0, 20.0], [50.0, 40.0], 0.0, 0.0, .000001, 50000)
+orig_system = System([50.0, 40.0], [60.0, 10.0], 0.0, 0.0, .001, 50)
 
-function heuristic(params::Vector{Float64}, system::S.System)::Float64
-    #params = S.ControlParams(params...)
+function heuristic(params::Vector{Float64}, system::System)::Float64
+    #params = ControlParams(params...)
     params = S.make_cubic(params)
     total = 0.0
     accel_x = 0.0
@@ -27,7 +27,7 @@ function heuristic(params::Vector{Float64}, system::S.System)::Float64
     return total
 end
 
-function random_walk(start_params::Vector{Float64}, system::S.System; variance=.01, trials=50)::Vector{Float64}
+function random_walk(start_params::Vector{Float64}, system::System; variance=.01, trials=50)::Vector{Float64}
     best_score = heuristic(start_params, system)
     best_params = start_params
     tries = 0
@@ -48,7 +48,7 @@ function random_walk(start_params::Vector{Float64}, system::S.System; variance=.
     return best_params
 end
 
-function jitter_walk(start_params::Vector{Float64}, system::S.System; variance=.01, trials=50)::Vector{Float64}
+function jitter_walk(start_params::Vector{Float64}, system::System; variance=.01, trials=50)::Vector{Float64}
     best_score = heuristic(start_params, system)
     best_params = start_params
     tries = 0
@@ -71,7 +71,7 @@ function jitter_walk(start_params::Vector{Float64}, system::S.System; variance=.
     return best_params
 end
 
-function random_search(orig_system::S.System; trials::Int64=50)::Vector{Float64}
+function random_search(orig_system::System; trials::Int64=50)::Vector{Float64}
     d = Uniform(-30, 30)
     best_score = 9999999.0
     #best_params = Vector{Float64}(3)

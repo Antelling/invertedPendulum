@@ -41,6 +41,6 @@ function euler_simulation(system, accel_x::Float64)
     #we re-invert the y axis for graphing
     ball[2] *= -1
     support[2] *= -1
-    return S.System(support, ball, vel_x, vel_theta, system.DT, system.iterations)
+    return System(support, ball, vel_x, vel_theta, system.DT, system.iterations)
 end
 end

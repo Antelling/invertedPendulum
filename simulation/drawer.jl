@@ -1,13 +1,11 @@
 module D
 
-import Graphics
-import Cairo
-import Tk
+using Graphics, Gtk
 
-win = Tk.Toplevel("Test", 1000, 1000) #define a window
-c = Tk.Canvas(win)
-Tk.pack(c, expand=true, fill="both") #make the canvas object fill the window
-ctx = Tk.getgc(c) #get the graphics context
+win = Gtk.@Window("Test", 1000, 1000) #define a window
+c = Gtk.Canvas(win)
+Gtk.pack(c, expand=true, fill="both") #make the canvas object fill the window
+ctx = Gtk.getgc(c) #get the graphics context
 
 #set up the coordinates to go from 0 to 100
 Graphics.set_coordinates(ctx, 0, 0, 1000, 1000, 0, 100, 0, 100)
@@ -34,7 +32,7 @@ function drawLine(start_x::Float64, start_y::Float64, end_x::Float64, end_y::Flo
 end
 
 function resetFrame()
-    Tk.reveal(c)
+    Gtk.reveal(c)
 
     Cairo.Cairo.set_source_rgba(ctx, 0, 0, 0, .01)
     Cairo.paint(ctx) # paint the entire clip region
